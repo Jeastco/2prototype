@@ -1,0 +1,100 @@
+# =============================================
+# ADS-Nyanza .htaccess - For /updated/ Subfolder
+# Main Page: index.php
+# =============================================
+
+RewriteEngine On
+
+# IMPORTANT: Set the base to /updated/
+RewriteBase /updated/
+
+# =============================================
+# 1. SET DEFAULT PAGE TO INDEX.PHP
+# =============================================
+DirectoryIndex index.php home.php index.html
+
+# =============================================
+# 2. HANDLE PHP FILES WITHOUT EXTENSION
+# =============================================
+# First, check if the requested file exists
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# Remove .php extension from URLs
+# e.g., /about → /about.php
+RewriteCond %{REQUEST_FILENAME}.php -f
+RewriteRule ^([^\.]+)$ $1.php [L]
+
+# Remove .html extension from URLs
+RewriteCond %{REQUEST_FILENAME}.html -f
+RewriteRule ^([^\.]+)$ $1.html [L]
+
+# =============================================
+# 3. HANDLE "Our Projects" FOLDER
+# =============================================
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^Our\ Projects/([^/]+)/?$ Our\ Projects/$1.php [L]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^Our\ Projects/([^/]+)/([^/]+)/?$ Our\ Projects/$1/$2.php [L]
+
+# =============================================
+# 4. HANDLE "Senior Management" FOLDER
+# =============================================
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^Senior\ Management/([^/]+)/?$ Senior\ Management/$1.php [L]
+
+# =============================================
+# 5. HANDLE "The Board" FOLDER
+# =============================================
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^The\ Board/([^/]+)/?$ The\ Board/$1.php [L]
+
+# =============================================
+# 6. HANDLE "Engage" FOLDER
+# =============================================
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^Engage/([^/]+)/?$ Engage/$1.php [L]
+
+# =============================================
+# 7. ALLOW DIRECT ACCESS TO EXISTING FILES
+# =============================================
+# Allow direct access to existing files (images, css, js)
+RewriteCond %{REQUEST_FILENAME} -f
+RewriteRule ^ - [L]
+
+# Allow direct access to existing directories
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+# =============================================
+# 8. REDIRECT URL ENCODED SPACES
+# =============================================
+RewriteCond %{REQUEST_URI} /Our%20Projects/(.*)$ [NC]
+RewriteRule ^Our%20Projects/(.*)$ Our\ Projects/$1 [L,R=301]
+
+RewriteCond %{REQUEST_URI} /Senior%20Management/(.*)$ [NC]
+RewriteRule ^Senior%20Management/(.*)$ Senior\ Management/$1 [L,R=301]
+
+RewriteCond %{REQUEST_URI} /The%20Board/(.*)$ [NC]
+RewriteRule ^The%20Board/(.*)$ The\ Board/$1 [L,R=301]
+
+# =============================================
+# 9. SECURITY - Disable Directory Browsing
+# =============================================
+Options -Indexes
+
+# =============================================
+# 10. ERROR DOCUMENTS
+# =============================================
+ErrorDocument 404 /updated/404.html
+ErrorDocument 403 /updated/403.html
+
+# =============================================
+# END
+# =============================================
